@@ -45,6 +45,7 @@ object camion {
     	else{return cosas.max({cosa => cosa.peso()})}
     } 
     
+    	
     
 }
 
