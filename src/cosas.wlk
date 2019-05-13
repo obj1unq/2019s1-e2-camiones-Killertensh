@@ -2,6 +2,7 @@
 	method peso() { return 500 }
 	method nivelPeligrosidad() { return 10 }
 	method bultos() = 1
+	method serCargada(){}
 }
 
 object bumblebee {
@@ -14,6 +15,10 @@ object bumblebee {
 	method transformar() { transformadoEnAuto = not transformadoEnAuto }
 	
 	method bultos() = 2
+	
+	method estaEnModoAuto() = transformadoEnAuto
+	
+	method serCargada() { transformadoEnAuto = false }
 }
 
 object paqueteDeLadrillos{
@@ -24,11 +29,9 @@ object paqueteDeLadrillos{
 	
 	method nivelPeligrosidad() = 2
 	
-	method bultos(){
-		if (cantLadrillos <= 100) {return 1}
-		else if (cantLadrillos.between(101,300)){return 2}
-		else{return 3}  
-	}
+	method bultos() = (self.cantLadrillos() / 100).roundUp()
+	
+	method serCargada() {cantLadrillos +=12}
 }
 
 object arenaAGranel{
@@ -39,6 +42,8 @@ object arenaAGranel{
 	method nivelPeligrosidad() = 1
 	
 	method bultos() = 1
+	
+	method serCargada(){pesoActual += 20}
 }
 
 object bateriaAntiAerea{
@@ -56,7 +61,9 @@ object bateriaAntiAerea{
 	method bultos(){
 		if (self.tieneMisiles()){return 1}
 	    else{return 2}	
-	}   
+	}
+	
+	method serCargada(){tieneMisiles = true}   
 }
 
 
@@ -65,25 +72,42 @@ object contenedorPortuario{
 	
 	 
 	method peso() {
-		if (cosasDentro == []){return 0}
+		if (cosasDentro.isEmpty()){return 0}
 		else{ return 100 + self.pesoTotalDeCosas() } 
 	}
 	method pesoCosas() = cosasDentro.map({cosa => cosa.nivelPeligrosidad()})
 	
 	method pesoTotalDeCosas() = self.pesoCosas() .sum()
 	
-	method nivelPeligrosidad() = self.pesoCosas().max()
+	method nivelPeligrosidad() {
+		if (cosasDentro.isEmpty()){return 0}
+		else{ return self.nivelPeligrosidadDeCosasDentro().max() } 
+	}
+	
+	method nivelPeligrosidadDeCosasDentro() =
+	    cosasDentro.map({cosa => cosa.nivelPeligrosidad()})
 	
 	method agregarCosa(cosa){ cosasDentro.add(cosa) }
 	
+	method serCargada(){
+		cosasDentro.forEach({cosa => cosa.serCargada()})
+	}
+	
 }
 
-object contRadioactivo{
-	var property peso = 0
+object residuoRadioactivo{
+	var  peso = 0
+	
+	
+	method setearPeso(unPeso){peso = unPeso}
+	
+	method peso() = peso
 	
 	method nivelPeligrosidad() = 200
 	
 	method bultos() = 1
+	
+	method serCargada(){peso += 15}
 }
 
 
@@ -94,6 +118,7 @@ object embalajeDeSeguridad{
 	method peso(){
 		if (!self.tieneAlgoDentro()){return 0}
 		else{return cosaDentro.peso()}
+					
 	}
 	
 	method tieneAlgoDentro() = cosaDentro != null
@@ -104,6 +129,8 @@ object embalajeDeSeguridad{
 	}
 	
 	method bultos() = 2
+	
+	method serCargada(){}
 	
 }
 
