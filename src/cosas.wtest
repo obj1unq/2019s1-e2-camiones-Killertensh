@@ -1,0 +1,47 @@
+import cosas.*
+
+describe "test de cosas"{
+
+test "knight rider pesa 500 kilos y su nivel de peligrosidad es de 1" {
+
+	assert.equals(500 ,knightRider.peso())
+
+}
+
+test "Bumblebee esta por default en modo auto y su peligrosidad es 0 "{
+	assert.that(bumblebee.estaEnModoAuto())
+}
+    
+  
+test "Si hay 150 ladrillos, la cantidad de bultos es de 2"{
+	paqueteDeLadrillos.cantLadrillos(150)
+	assert.equals(2,paqueteDeLadrillos.bultos())
+}    
+    
+
+test "La beteria antiaérea no es peligrosa sin misiles"{
+   bateriaAntiAerea.tieneMisiles(false)
+   assert.equals(0, bateriaAntiAerea.nivelPeligrosidad())	
+}
+
+test "La beteria antiaérea es peligrosa conn misiles"{
+   bateriaAntiAerea.tieneMisiles(true)
+   assert.equals(100, bateriaAntiAerea.nivelPeligrosidad())	
+}
+
+test "El contenedor portuario no es peligroso estando vacio"{
+	assert.equals(0 , contenedorPortuario.nivelPeligrosidad())
+} 
+
+test "El contenedor portuario es peligroso con residuos radioactivos dentro"{
+	contenedorPortuario.agregarCosa(residuoRadioactivo)
+	assert.equals(200 , contenedorPortuario.nivelPeligrosidad())
+}
+
+test "El embalaje pesa lo mismo que lo que envuelve"{
+	embalajeDeSeguridad.cosaDentro(bumblebee)
+	assert.equals(800 , embalajeDeSeguridad.peso())
+}  
+
+}
+   

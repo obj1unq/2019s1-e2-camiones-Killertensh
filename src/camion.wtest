@@ -1,0 +1,87 @@
+import camion.*
+import cosas.*
+
+describe "test del camion"{
+	
+	fixture{
+		camion.cargar(bumblebee)
+		residuoRadioactivo.setearPeso(30)
+		camion.cargar(residuoRadioactivo)
+	}
+
+test "El camion carga a knight rider" {
+
+	camion.cargar(knightRider)
+	assert.equals([bumblebee,residuoRadioactivo,knightRider] , camion.cosas())
+
+}
+
+test "El camion descarga a bumblebee"{
+	camion.descargar(bumblebee)
+	assert.equals([residuoRadioactivo], camion.cosas())
+}
+
+test "El camion sin nada cargado pesa 1 tonelada"{
+	camion.descargarTodo()
+	assert.equals(1000 , camion.pesoTotal())
+}
+
+test "El camion con bumblebee y knightRider pesa 2300 kilos"{
+	camion.descargar(residuoRadioactivo)
+	camion.cargar(knightRider)
+	assert.equals(2300, camion.pesoTotal())
+}
+
+test "El camion no esta excedido de peso"{
+	assert.notThat(camion.excedidoDePeso())
+}
+
+test "Objetos peligrosos de nivel 200 cargados en el camion"{
+	assert.equals([residuoRadioactivo],camion.objetosPeligrosos(200))
+	
+}
+
+test "Objetos mas peligrosos que knight rider"{
+	assert.equals([bumblebee,residuoRadioactivo] , camion.objetosMasPeligrososQue(knightRider))
+}
+
+test "El camion no puede circular por la ruta"{
+	assert.notThat(camion.puedeCircularEnRuta(50))
+}
+
+test "El camion puede circular en la ruta sin los residuos radioactivos"{
+	camion.descargar(residuoRadioactivo)
+	assert.that(camion.puedeCircularEnRuta(50))
+}
+
+test "El camion tiene algo que pesa entre 20 y 800 kilos"{
+	assert.that(camion.tieneAlgoQuePesaEntre(20,800))
+}
+
+test "El camion no tiene nada que pesa entre 1000 y 2000 kilos"{
+	assert.notThat(camion.tieneAlgoQuePesaEntre(1000,2000))
+}
+
+test "Devuelve la cosa mas pesada en el camion"{
+	assert.equals(bumblebee , camion.cosaMasPesada())
+}
+
+test "Total bultos"{
+	assert.equals(3 , camion.totalBultos())
+}
+
+test "Pesos"{
+	assert.equals(845 , camion.pesoTotalDeCosas())
+}
+
+test "La bateria antiaerea sufre cambios al ser cargado en el camion"{
+    bateriaAntiAerea.tieneMisiles(false)
+	camion.cargar(bateriaAntiAerea)
+	assert.that(bateriaAntiAerea.tieneMisiles())
+}
+
+
+
+
+
+}
